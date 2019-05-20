@@ -7,9 +7,12 @@ public class Square
     private int letterMultiplier;
     private int wordMultiplier;
 
-    public Square()
+    public Square(int posX,int posY,int letterMultiplier,int wordMultiplier)
     {
-
+        this.positionX = posX;
+        this.positionY = posY;
+        this.letterMultiplier = letterMultiplier;
+        this.wordMultiplier = wordMultiplier;
     }
 
     /**
@@ -47,7 +50,7 @@ public class Square
 
     public void clearSquare()
     {
-        
+
     }
 
 }

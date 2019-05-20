@@ -5,8 +5,12 @@ public class Player
     private TileCollection playerTiles;
     private int score;
 
-    public Player()
+    public Player(int playerID,String playerName)
     {
+        this.playerID = playerID;
+        this.playerName = playerName;
+        playerTiles = new TileCollection();
+        this.score = 0;
 
     }
     

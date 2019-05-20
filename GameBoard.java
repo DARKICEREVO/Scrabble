@@ -8,7 +8,8 @@ public class GameBoard
 
     public GameBoard()
     {
-
+        squareGrid = new ArrayList<Square>();
+        currentPlacement = new ArrayList<Square>();
     }
 
     private void initialize()
@@ -43,7 +44,7 @@ public class GameBoard
 
     public boolean removeTileFromBoard(int tileID)
     {
-        
+
     }
 
 }
