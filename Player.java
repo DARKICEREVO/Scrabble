@@ -4,7 +4,11 @@ public class Player
     private String playerName;
     private TileCollection playerTiles;
     private int score;
-    
+
+    public Player()
+    {
+
+    }
     
     public int getPlayerID()
     {
