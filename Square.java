@@ -16,16 +16,32 @@ public class Square
     }
 
     /**
+     * @return the positionX
+     */
+    public int getPositionX() 
+    {
+        return positionX;
+    }
+    /**
+     * @return the positionY
+     */
+    public int getPositionY() 
+    {
+        return positionY;
+    }
+    /**
      * @param tileOnSquare the tileOnSquare to set
      */
-    public void setTileOnSquare(Tile tileOnSquare) {
+    public void setTileOnSquare(Tile tileOnSquare) 
+    {
         this.tileOnSquare = tileOnSquare;
     }
 
     /**
      * @return the tileOnSquare
      */
-    public Tile getTileOnSquare() {
+    public Tile getTileOnSquare() 
+    {
         Tile tile;
         tile = tileOnSquare;
         tileOnSquare = null;
@@ -33,16 +49,28 @@ public class Square
     }
 
     /**
+     * @return the tileOnSquare
+     */
+    public Tile peekTileOnSquare() 
+    {
+        Tile tile;
+        tile = tileOnSquare;
+        return tile;
+    }
+
+    /**
      * @return the letterMultiplier
      */
-    public int getLetterMultiplier() {
+    public int getLetterMultiplier() 
+    {
         return letterMultiplier;
     }
 
     /**
      * @return the wordMultiplier
      */
-    public int getWordMultiplier() {
+    public int getWordMultiplier() 
+    {
         return wordMultiplier;
     }
 
