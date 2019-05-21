@@ -11,7 +11,7 @@ public class Player
     {
         this.playerID = playerID;
         this.playerName = playerName;
-        playerTiles = new TileCollection();
+        playerTiles = new TileCollection(0,7);
         this.score = 0;
 
     }
