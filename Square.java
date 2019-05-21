@@ -26,7 +26,10 @@ public class Square
      * @return the tileOnSquare
      */
     public Tile getTileOnSquare() {
-        return tileOnSquare;
+        Tile tile;
+        tile = tileOnSquare;
+        tileOnSquare = null;
+        return tile;
     }
 
     /**
@@ -45,12 +48,19 @@ public class Square
 
     public boolean isEmpty()
     {
-
+        if(tileOnSquare == null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void clearSquare()
     {
-
+        tileOnSquare = null;
     }
 
 }
