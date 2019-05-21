@@ -4,10 +4,6 @@
 public class TilePool 
 {
 
-    static
-    {
-        initialize();
-    }
     private static TileCollection tilePool = new TileCollection(0, 100);
     
     /**
@@ -18,7 +14,7 @@ public class TilePool
     /**
      * Register all tiles in Scrabble game using enum
      */
-    private static void initialize()
+    public static void initialize()
     {
         //Clear previous tiles first
         tilePool.clear();

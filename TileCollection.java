@@ -25,11 +25,11 @@ class TileComparator implements Comparator<Tile>
     @Override
     public int compare(Tile t1, Tile t2) 
     {
-        int different = t1.getValue() - t2.getValue();
+        int different = t1.getTileValue() - t2.getTileValue();
         // if score is equal, compare by id
         if(different == 0) 
         {
-            return t1.getId() - t2.getId();
+            return t1.getTileID() - t2.getTileID();
         }
         return different;
     }
@@ -74,6 +74,14 @@ public class TileCollection
 
     public boolean removeTile(int tileID) 
     {
+        if(tiles.size() > 0)
+        {
+            return tiles.removeIf(tile -> (tile.getTileID() == tileID));
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public int getTileCount()
@@ -81,33 +89,52 @@ public class TileCollection
         return tiles.size();
     }
 
+    public Tile getTile(int tileID)
+    {
+        if(tiles.size() >= 1)
+        {
+            for(Tile tile : tiles)
+            {
+                if(tile.getTileID() == tileID)
+                {
+                    removeTile(tile.getTileID());
+                    return tile;
+                }
+            }
+        }
+        return null;
+    }
     /**
      * Return randomly selected tile from the set
      * @return  randomly selected tile
      */
     public Tile getRandom()
     {
-        /*
-         *  randomly pick one number within range of set's size 
-         *  using current time in millisec. for the seed for more randomness
-         */
-        int randomIndex =  new Random(System.currentTimeMillis()).nextInt(tiles.size());
-        int i = 0;
-        /*
-        Iterate over all tiles in set to get
-        the tile with index equal to randomly selected number
-        */
-        for (Tile tile : tiles) 
+        if(tiles.size() >= 1)
         {
-            if(i == randomIndex)
+            /*
+             *  randomly pick one number within range of set's size 
+             *  using current time in millisec. for the seed for more randomness
+             */
+            int randomIndex =  new Random(System.currentTimeMillis()).nextInt(tiles.size());
+            int i = 0;
+            /*
+            Iterate over all tiles in set to get
+            the tile with index equal to randomly selected number
+            */
+            for (Tile tile : tiles) 
             {
-                return tile;
+                if(i == randomIndex)
+                {
+                    removeTile(tile.getTileID());
+                    return tile;
+                }
+                i++;
             }
-            i++;
         }
         return null;
     }
-    
+
     public void clear()
     {
         tiles.clear();
