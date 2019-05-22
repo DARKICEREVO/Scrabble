@@ -59,6 +59,11 @@ public class Player
         return playerTiles.getTile(tileID);
     }
 
+    public void showTile()
+    {
+        
+    }
+
     public Tile getStartTile()
     {
         Tile tempStartTile;
