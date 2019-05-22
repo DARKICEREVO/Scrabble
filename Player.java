@@ -109,17 +109,18 @@ public class Player
         }
     }
 
-    public boolean filledRack()
+    public void fillRack()
     {
         int tileRemain = 7-playerTiles.getTileCount();
         if(TilePool.getTileCount()>=tileRemain)
         {
             selectTiles(tileRemain);
-            return true;
+            
         }
         else
         {
-            return false;
+            selectTiles(TilePool.getTileCount());
+            
         }
         
     }
