@@ -74,7 +74,9 @@ public class TileCollection
         while(tileIterator.hasNext())
         {
             Tile currentTile = tileIterator.next();
-            System.out.println(currentTile + " ");
+            System.out.print("["+currentTile.getTileLetter()+" ");
+            System.out.print(""+currentTile.getTileID()+"]");
+
             count++;
             if(count % 10 == 0)
                 System.out.println("");
@@ -85,8 +87,8 @@ public class TileCollection
     /**
      * add new tile to collection
      * @param tile tile to be added to collection
-     * @return true number of tiles has not reached maximum
-     *         false number of tiles is at maximum
+     * @return  true number of tiles has not reached maximum 
+     *          false number of tiles is at maximum
      */
     public boolean addTile(Tile tile)
     {
@@ -128,6 +130,22 @@ public class TileCollection
             for(Tile tile : tiles)
             {
                 if(tile.getTileID() == tileID)
+                {
+                    removeTile(tile.getTileID());
+                    return tile;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Tile getTile(String letter)
+    {
+        if(tiles.size() >= 1)
+        {
+            for(Tile tile : tiles)
+            {
+                if(tile.getTileLetter().equalsIgnoreCase(letter))
                 {
                     removeTile(tile.getTileID());
                     return tile;

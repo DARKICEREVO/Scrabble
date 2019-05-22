@@ -27,7 +27,7 @@ public class IOUtils {
             System.exit(1);
         }
         inputString = new String(buffer);
-        int pos = inputString.indexOf("\n");
+        int pos = inputString.indexOf("\r\n");
         if (pos > 0)
             inputString = inputString.substring(0, pos);
         return inputString;
@@ -54,7 +54,7 @@ public class IOUtils {
         }
         inputString = new String(buffer);
         try {
-            int pos = inputString.indexOf("\n");
+            int pos = inputString.indexOf("\r\n");
             if (pos > 0)
                 inputString = inputString.substring(0, pos);
             value = Integer.parseInt(inputString);
