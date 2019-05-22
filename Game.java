@@ -1,5 +1,3 @@
-package Scrabble;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Queue;
@@ -33,25 +31,27 @@ public class Game
     public static void initialize() 
     {
         TilePool.initialize();
+        GameBoard.initialize();
+        Dictionary.initialize();
     }
 
     public static void startGame(int numberOfPlayer)
     {
         int i=0;
-        int closestIndex=0;
         TreeMap<Tile,Player> startTilePlayerMap = new TreeMap<Tile,Player>(new StartTilePlayerComparator());
         boolean isSameTileOccur = false; 
         do
         {
-            Tile closetTile = null;
+            isSameTileOccur = false;
             for(i=0;i<numberOfPlayer;i++)
             {
                 //ask for player's name
                 GameDisplay.displayMessage("What is player "+(i+1)+" name?");
                 //wait for input
                 String playerName = IOUtils.getString("");
-                Player player = new Player(i,playerName);
-                startTilePlayerMap.put(player.getStartTile(), player);
+                Player player = new Player(playerName);
+                //check for duplicate name
+                startTilePlayerMap.put(player.getStartTile(), player); // need to give the tile back to pool
             }
             Stream<Tile> startTilesStream = startTilePlayerMap.keySet().stream();
             Stream<String> startLetters = startTilesStream.map(tile -> tile.getTileLetter());
@@ -94,61 +94,79 @@ public class Game
 
     public static void takeTurn() 
     {
-        GameDisplay.displayMessage("What do you want to do?");
-        GameDisplay.displayMessage("1)Place a word");
-        GameDisplay.displayMessage("2)Swap tile(s)");
-        GameDisplay.displayMessage("3)Pass the turn");
-        GameDisplay.displayMessage("4)Quit the game");
-        GameDisplay.displayMessageInline(currentPlayer.getPlayerName()+"> ");
-        int playerChoice = IOUtils.getIntegerInRange("", 1, 4);
-        Tile tile;
-        String answer;
-        switch (playerChoice) 
+        boolean isTurnEnd = false;
+        do
         {
-            case 1: // place a word
-                int tilesUsedCount = 0;
-                do
-                {
-                    tile = getTileFromPlayer();
-                    boolean isPlaced = false;
+            GameDisplay.displayMessage("What do you want to do?");
+            GameDisplay.displayMessage("1)Place a word");
+            GameDisplay.displayMessage("2)Swap tile(s)");
+            GameDisplay.displayMessage("3)Pass the turn");
+            GameDisplay.displayMessage("4)Quit the game");
+            GameDisplay.displayMessageInline(currentPlayer.getPlayerName()+"> ");
+            int playerChoice = IOUtils.getIntegerInRange("", 1, 4);
+            Tile tile;
+            String answer;
+            switch (playerChoice) 
+            {
+                case 1: // place a word
+                    int tilesUsedCount = 0;
                     do
                     {
-                        int positionX = IOUtils.getIntegerInRange("", 1, 255);
-                        int positionY = IOUtils.getIntegerInRange("", 1, 255);
-                        isPlaced = GameBoard.placeTileTo(positionX, positionY, tile);
-                        if(!isPlaced)
-                            GameDisplay.displayMessage("Please select other square");
-                    }while(!isPlaced);
-                    tilesUsedCount++;
-                    GameDisplay.displayMessageInline("More tile? (Y or N)> ");
+                        tile = getTileFromPlayer();
+                        boolean isPlaced = false;
+                        do
+                        {
+                            int positionX = IOUtils.getIntegerInRange("", 1, 15);
+                            int positionY = IOUtils.getIntegerInRange("", 1, 15);
+                            isPlaced = GameBoard.placeTileTo(positionX, positionY, tile);
+                            if(!isPlaced)
+                                GameDisplay.displayMessage("Please select other square");
+                        }while(!isPlaced);
+                        tilesUsedCount++;
+                        GameDisplay.displayMessageInline("More tile? (Y or N)> ");
+                        answer = IOUtils.getString("");
+                    }while(answer.equalsIgnoreCase("Y"));
+                    boolean isPlaceCorrect = GameBoard.validatePlacement();
+                    if(isPlaceCorrect)
+                    {
+                        challenge();
+                    }
+                    else
+                    {
+                        isTurnEnd = false;
+                    }
+                    break;
+                case 2: // swap tiles
+                    ArrayList<Integer> tilesID = new ArrayList<Integer>();
+                    do
+                    {
+                        tile = getTileFromPlayer();
+                        tilesID.add(tile.getTileID());//may be we can just send Tile instance?
+                        GameDisplay.displayMessageInline("More tile? (Y or N)> ");
+                        answer = IOUtils.getString("");
+                    }while(answer.equalsIgnoreCase("Y"));
+                    int[] tilesIDIntArray = tilesID.stream()
+                                                .mapToInt(Integer::intValue)
+                                                .toArray(); 
+                    currentPlayer.swapTile(tilesIDIntArray);
+                    break;
+                case 3: // pass
+                    GameDisplay.displayMessageInline("Are you sure? (Y or N)> ");
                     answer = IOUtils.getString("");
-                }while(answer.equals("Y"));
-
-                int totalScore = GameBoard.calculateLastPlacementScore();
-                currentPlayer.updateScore(totalScore);
-                challenge();
-                break;
-            case 2: // swap tiles
-                ArrayList<Integer> tilesID = new ArrayList<Integer>();
-                do
-                {
-                    tile = getTileFromPlayer();
-                    tilesID.add(tile.getTileID());//may be we can just send Tile instance?
-                    GameDisplay.displayMessageInline("More tile? (Y or N)> ");
-                    answer = IOUtils.getString("");
-                }while(answer.equals("Y"));
-                int[] tilesIDIntArray = tilesID.stream()
-                                            .mapToInt(Integer::intValue)
-                                            .toArray(); 
-                currentPlayer.swapTile(tilesIDIntArray);
-                break;
-            case 3: // pass
-                GameDisplay.displayMessage(currentPlayer.getPlayerName()+" passed the turn");
-                break;
-            case 4: // quit
-                removePlayer();
-                break;
-        }
+                    if(answer.equalsIgnoreCase("N"))
+                    {
+                        isTurnEnd = false;
+                    }
+                    else
+                    {
+                        GameDisplay.displayMessage(currentPlayer.getPlayerName()+" passed the turn");
+                    }
+                    break;
+                case 4: // quit
+                    removePlayer();
+                    break;
+            }
+        }while(!isTurnEnd);
         boolean isEnd = isEnd();
         if(!isEnd)
             nextTurn();
@@ -227,15 +245,18 @@ public class Game
         boolean isInDictionary = WordChecker.verifyLastWords();
         if(isInDictionary)
         {
+            int totalScore = GameBoard.calculateLastPlacementScore();
+            currentPlayer.updateScore(totalScore);
             skippedPlayers.add(skippedPlayer);
         }
         else
         {
-            int reverseScore = GameBoard.calculateLastPlacementScore();
-            currentPlayer.updateScore(-reverseScore);
             GameBoard.restoreTileToPlayer();
         }
 
     }
-    
+    public static void main(String[] args) 
+    {
+        
+    }   
 }

@@ -56,7 +56,6 @@ public class Player
 
     public Tile getTile(int tileID)
     {
-        // we can't do that here we dont have getTile
         return playerTiles.getTile(tileID);
     }
 

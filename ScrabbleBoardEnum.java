@@ -1,5 +1,3 @@
-package Scrabble;
-
 public enum ScrabbleBoardEnum
 {
     /*

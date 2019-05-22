@@ -35,17 +35,38 @@ class TileComparator implements Comparator<Tile>
     }
     
 }
+/**
+ * TileCollection class
+ * serve as general collection of tiles for tile pool 
+ * and tile rack (for player)
+ * 
+ * Created by Puwit Yahom 22 May 2019
+ */
 public class TileCollection 
 {
+    /** use treeset for auto sort  */
     private TreeSet<Tile> tiles = new TreeSet<>(new TileComparator());
+    /** minimum number of tile possible */
     private int minTiles;
+    /** maximum number of tile possible */
     private int maxTiles;
-
+    
+    /**
+     * Contructor creates a new TileCollection by setting
+     * boundary of number of tiles possible
+     * @param minTiles minimum number of tile possible
+     * @param maxTiles maximum number of tile possible
+     */
     public TileCollection(int minTiles, int maxTiles) 
     {
         this.minTiles = minTiles;
         this.maxTiles = maxTiles;
     }
+
+
+    /**
+     * print all tiles in collection
+     */
     public void showTiles()
     {
         Iterator<Tile> tileIterator = tiles.iterator();
@@ -61,6 +82,12 @@ public class TileCollection
         System.out.println("");
     }
 
+    /**
+     * add new tile to collection
+     * @param tile tile to be added to collection
+     * @return true number of tiles has not reached maximum
+     *         false number of tiles is at maximum
+     */
     public boolean addTile(Tile tile)
     {
         if(tiles.size() + 1 > maxTiles)
@@ -71,7 +98,12 @@ public class TileCollection
             return true;
         }
     }
-
+    
+    /**
+     * 
+     * @param tileID
+     * @return
+     */
     public boolean removeTile(int tileID) 
     {
         if(tiles.size() > 0)

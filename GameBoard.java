@@ -45,13 +45,95 @@ public class GameBoard
         }
 
     }
+    private static String getSquareString(int positionX,int positionY)
+    {
+        int index = (positionX-1)*15+(positionY-1);
+        Square square = squareGrid.get(index);
+        int letterMultiplier = square.getLetterMultiplier();
+        int wordMultiplier = square.getWordMultiplier();
+        Tile tile = square.peekTileOnSquare();
+        String thingOnSquare = new String();
+        if(tile == null)
+        {
+            if(positionX == 8 && positionY == 8)
+            {
+                thingOnSquare = new String("<S>");
+            }
+            else if(letterMultiplier==1 && wordMultiplier == 1)
+            {
+                thingOnSquare = new String(" ");
+            }
+            else if(letterMultiplier == 1) // it is word mul
+            {
+                switch (wordMultiplier) 
+                {
+                    case 2:
+                        thingOnSquare = new String("2W");
+                        break;
+                    case 3:
+                        thingOnSquare = new String("3W");
+                        break;
+                }
+            }
+            else if(wordMultiplier == 1) // it is letter mul
+            {
+                switch (letterMultiplier) 
+                {
+                    case 2:
+                        thingOnSquare = new String("2L");
+                        break;
+                    case 3:
+                        thingOnSquare = new String("3L");
+                        break;
+                }
+            }
+        }
+        else
+        {
+            thingOnSquare = tile.getTileLetter();
+        }
+        return thingOnSquare;
+    }
     /**
      * show square layout and every tile on the board
      * 
      */
     public static void viewBoard()
     {
+        for (int i = 1; i <= 15; i++) 
+        {
+            for (int j = 0; j < 15; j++) 
+            {
+                System.out.print("+-----");    
+            }
+            System.out.println("+");    
 
+            for (int j = 1; j <= 15; j++) 
+            {
+                String letterOnBoard = getSquareString(i, j);
+                // String letterOnBoard = new String(" ");
+                if(letterOnBoard.length() == 1)
+                {
+                    System.out.print("|  "+letterOnBoard+"  ");
+                }
+                else if(letterOnBoard.length() == 2)
+                {
+                    System.out.print("| "+letterOnBoard.charAt(0)+" "+letterOnBoard.charAt(1)+" ");
+                }
+                else
+                {
+                    System.out.print("| "+letterOnBoard+" ");
+                }
+
+            }
+            System.out.println("|");    
+
+        }
+        for (int j = 0; j < 15; j++) 
+        {
+            System.out.print("+-----");    
+        }
+        System.out.println("+"); 
     }
     /**
      * place tile to board at positionX positionY 

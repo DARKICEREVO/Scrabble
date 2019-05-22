@@ -1,6 +1,3 @@
-package Scrabble;
-
-
 public class Square
 {
     private int positionX;
