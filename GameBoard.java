@@ -1,19 +1,38 @@
-
 import java.util.*;
-
+/** 
+ * GameBoard 
+ * represent Board of Scrabble game with fuction to form and calculate words
+ * Created By Patipon Petchtone 59070501049 CPE
+ * 
+ * Board Indexing
+ *   X  1   2   3   4   5
+ *  Y
+ * 
+ *  1   A   N   T
+ *    
+ *  2           O
+ * 
+ *  3       U   N   I   T
+ * 
+ *  4           E
+*/
 public class GameBoard
 {
+    /** structure of square on Board */
     private static ArrayList<Square> squareGrid;
-    
+    /** Collection of square placement that player in that turn play */
     private static ArrayList<Square> currentPlacement;
-
+    /** Group of square collection that need to use in calculate score section */
     private static ArrayList<SquareCollection> words;
 
     private GameBoard()
     {
         
     }
-
+    /**
+     * Initial procedure to make the scrabble board
+     * 
+     */
     public static void initialize()
     {
         squareGrid = new ArrayList<Square>();
@@ -26,12 +45,21 @@ public class GameBoard
         }
 
     }
-
+    /**
+     * show square layout and every tile on the board
+     * 
+     */
     public static void viewBoard()
     {
 
     }
-
+    /**
+     * place tile to board at positionX positionY 
+     * @param positionX position X of board
+     * @param positionY position Y of board
+     * @param tile letter tile 
+     * @return boolean that tell you can place on that position. true if can,otherwise false.
+     */
     public static boolean placeTileTo(int positionX,int positionY,Tile tile)
     {
         if(squareGrid.get((positionX-1)*15+(positionY-1)).isEmpty())
@@ -45,7 +73,10 @@ public class GameBoard
             return false;
         }
     }
-
+    /**
+     * clear board re initial board but didn't reset placement.
+     * 
+     */
     public static void clearBoard()
     {
         squareGrid = new ArrayList<Square>();
@@ -55,12 +86,24 @@ public class GameBoard
             boardSquare.getLetterMultiplier(),boardSquare.getWordMultiplier()));
         }
     }
-
+    /**
+     * clear current placement 
+     */
     public static void clearCurrenPlacement()
     {
         currentPlacement = new ArrayList<Square>();
     }
-
+    /**
+     * clear words that use in score calculation;
+     */
+    public static void clearWords()
+    {
+        words = null;
+    }
+    /**
+     * check the current placement.are in the same alignment.
+     * @return true if currentplacement is aligned,otherwise false
+     */
     public static boolean validatePlacement()
     {
         Iterator<Square> iterator = currentPlacement.iterator();
@@ -94,7 +137,10 @@ public class GameBoard
         return isAlign;
         
     }
-
+    /**
+     * try to form the word that have made from player placement
+     * @return arraylist of word that make from current placement
+     */
     public static ArrayList<String> formWord()
     {
         Square targetSquare;
@@ -165,7 +211,10 @@ public class GameBoard
         }
         return wordList;
     }
-
+    /**
+     * calculate score from words
+     * @return score of placement
+     */
     public static int calculateLastPlacementScore()
     {
         int totalScore=0;
@@ -184,7 +233,9 @@ public class GameBoard
         }
         return totalScore;
     }
-
+    /**
+     * return tile in currentplacement back to player hand
+     */
     public static void restoreTileToPlayer()
     {
         Iterator<Square> iterator = currentPlacement.iterator();
@@ -197,7 +248,11 @@ public class GameBoard
         clearCurrenPlacement();
         
     }
-
+    /**
+     * remove tile that have ID same with parameter out from board
+     * @param tileID id of the tile you need to remove from board
+     * @return true if success,otherwise false
+     */
     public static boolean removeTileFromBoard(int tileID)
     {
         boolean isSuccess = false;
