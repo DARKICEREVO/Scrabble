@@ -7,6 +7,15 @@ public class GameDisplay
     {
     }
 
+    public static void showGeneralDisplay()
+    {
+        clearScreen();
+        showBoard();
+        Player currentPlayer = Game.getCurrentPlayer();
+        displayMessage(currentPlayer.getPlayerName()+"'s turn");
+        displayMessage("Your rack:");
+        currentPlayer.showTile();
+    }
     public static void showBoard() 
     {
         GameBoard.viewBoard(); 
@@ -21,15 +30,22 @@ public class GameDisplay
     {
         System.out.print(message);
     }
-    public static void showPlayerRack() 
+    public static void showCurrentPlayerRack() 
     {
-        
+        Game.getCurrentPlayer().showTile();
     }
     public static void clearScreen() 
     {
-        for (int i = 0; i < 50; i++) 
+        // for (int i = 0; i < 50; i++) 
+        // {
+        //     System.out.println("");
+        // }
+        try 
         {
-            System.out.println("");
+            new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
+        } catch (Exception e) 
+        {
+            System.out.println(e);
         }
     }
     public static void main(String[] args) 
