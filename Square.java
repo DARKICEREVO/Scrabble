@@ -6,6 +6,8 @@ public class Square
     private Tile tileOnSquare;
     private int letterMultiplier;
     private int wordMultiplier;
+    private boolean isEffectOn;
+    private int currentScore;
 
     public Square(int posX,int posY,int letterMultiplier,int wordMultiplier)
     {
@@ -13,6 +15,7 @@ public class Square
         this.positionY = posY;
         this.letterMultiplier = letterMultiplier;
         this.wordMultiplier = wordMultiplier;
+        this.isEffectOn = true;
     }
 
     /**
@@ -35,6 +38,7 @@ public class Square
     public void setTileOnSquare(Tile tileOnSquare) 
     {
         this.tileOnSquare = tileOnSquare;
+        calculateCurrentScore();
     }
 
     /**
@@ -74,6 +78,24 @@ public class Square
         return wordMultiplier;
     }
 
+    /**
+     * @return the currentScore
+     */
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    public boolean isEffectOn()
+    {
+        return isEffectOn;
+    }
+
+    public void usedEffect()
+    {
+        isEffectOn = false;
+        calculateCurrentScore();
+    }
+
     public boolean isEmpty()
     {
         if(tileOnSquare == null)
@@ -90,5 +112,23 @@ public class Square
     {
         tileOnSquare = null;
     }
+
+    private void calculateCurrentScore()
+    {
+        if(tileOnSquare == null)
+        {
+            
+        }
+        else if (isEffectOn)
+        {
+            currentScore = tileOnSquare.getTileValue() * letterMultiplier;
+        }
+        else
+        {
+            currentScore = tileOnSquare.getTileValue();
+        }
+        
+    }
+    
 
 }

@@ -143,7 +143,7 @@ public class GameBoard
                newWords.add(squareGrid.get((wordPointerX-1)*15+(startY-1)));
                wordPointerX++;
             }
-            if(!wordList.contains(tmpConcatenatorX))
+            if(!wordList.contains(tmpConcatenatorX)&&tmpConcatenatorX.length()!=1)
             {
                 wordList.add(tmpConcatenatorX);
                 words.add(new SquareCollection(newWords));
@@ -156,7 +156,7 @@ public class GameBoard
                newWords.add(squareGrid.get((startX-1)*15+(wordPointerY-1)));
                wordPointerY++;
             }
-            if(!wordList.contains(tmpConcatenatorY))
+            if(!wordList.contains(tmpConcatenatorY)&&tmpConcatenatorY.length()!=1)
             {
                 wordList.add(tmpConcatenatorY);
                 words.add(new SquareCollection(newWords));
@@ -168,7 +168,17 @@ public class GameBoard
 
     public static int calculateLastPlacementScore()
     {
-        
+        int totalScore=0;
+        int i;
+        Iterator<SquareCollection> wordIterator = words.iterator();
+        SquareCollection targetCollection;
+        while(wordIterator.hasNext())
+        {
+            targetCollection = wordIterator.next();
+            totalScore = totalScore + targetCollection.calculateScore();
+            targetCollection.setSquareEffectOff();
+        }
+        return totalScore;
     }
 
     public static void restoreTileToPlayer()
