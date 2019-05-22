@@ -1,5 +1,9 @@
 import java.util.HashMap;
-
+/**
+ * Dictionary.java
+ * this class represent a dictionary of scrabble game. it can find word and meaning
+ * created by Patipon Petchtone 18 May 2019
+ */
 public class Dictionary 
 {
     private static HashMap<String,String> dictionary;
