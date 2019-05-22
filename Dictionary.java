@@ -25,7 +25,7 @@ public class Dictionary
             {
                 break;
             }
-            String[]splitter = line.split(" ",2);
+            String[]splitter = line.split("\t",2);
             word = new String(splitter[0]);
             mean = new String(splitter[1]);
             dictionary.put(word,mean);
