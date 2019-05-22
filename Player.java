@@ -6,14 +6,15 @@ public class Player
     private String playerName;
     private TileCollection playerTiles;
     private int score;
+    private static int counter = 1;
 
-    public Player(int playerID,String playerName)
+    public Player(String playerName)
     {
-        this.playerID = playerID;
+        this.playerID = counter;
         this.playerName = playerName;
         playerTiles = new TileCollection(0,7);
         this.score = 0;
-
+        counter++;
     }
     
     public int getPlayerID()
