@@ -1,3 +1,8 @@
+/**
+ * ScrabbleBoard enum
+ * enum file for initialize Square in the game
+ * Created by Patipon Petchtone 18 May 2019
+ */
 public enum ScrabbleBoardEnum
 {
     /*
