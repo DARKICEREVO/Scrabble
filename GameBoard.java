@@ -117,55 +117,55 @@ public class GameBoard
         {
             if(i==1)
             {
-                System.out.print("   ");
+                GameDisplay.displayMessageInline("   ");
                 for (int j = 0; j < 15; j++) 
                 {
                     if(j+1<10)
-                        System.out.print("   "+(j+1)+"  ");
+                        GameDisplay.displayMessageInline("   "+(j+1)+"  ");
                     else
-                        System.out.print("  "+((j+1)/10)+" "+((j+1)%10)+" ");
+                        GameDisplay.displayMessageInline("  "+((j+1)/10)+" "+((j+1)%10)+" ");
     
                 }
-                System.out.println("");
+                GameDisplay.displayMessage("");
             }
-            System.out.print("   ");
+            GameDisplay.displayMessageInline("   ");
             for (int j = 0; j < 15; j++) 
             {
-                System.out.print("+-----");    
+                GameDisplay.displayMessageInline("+-----");    
             }
-            System.out.println("+");    
+            GameDisplay.displayMessage("+");    
             
             if(i<10)
-                System.out.print(i+"  ");
+                GameDisplay.displayMessageInline(i+"  ");
             else
-                System.out.print(i+" ");
+                GameDisplay.displayMessageInline(i+" ");
             for (int j = 1; j <= 15; j++) 
             {
                 String letterOnBoard = getSquareString(j, i);
                 // String letterOnBoard = new String(" ");
                 if(letterOnBoard.length() == 1)
                 {
-                    System.out.print("|  "+letterOnBoard+"  ");
+                    GameDisplay.displayMessageInline("|  "+letterOnBoard+"  ");
                 }
                 else if(letterOnBoard.length() == 2)
                 {
-                    System.out.print("| "+letterOnBoard.charAt(0)+" "+letterOnBoard.charAt(1)+" ");
+                    GameDisplay.displayMessageInline("| "+letterOnBoard.charAt(0)+" "+letterOnBoard.charAt(1)+" ");
                 }
                 else
                 {
-                    System.out.print("| "+letterOnBoard+" ");
+                    GameDisplay.displayMessageInline("| "+letterOnBoard+" ");
                 }
 
             }
-            System.out.println("|");    
+            GameDisplay.displayMessage("|");    
 
         }
-        System.out.print("   ");
+        GameDisplay.displayMessageInline("   ");
         for (int j = 0; j < 15; j++) 
         {
-            System.out.print("+-----");    
+            GameDisplay.displayMessageInline("+-----");    
         }
-        System.out.println("+"); 
+        GameDisplay.displayMessage("+"); 
     }
     /**
      * place tile to board at positionX positionY 
@@ -234,7 +234,7 @@ public class GameBoard
         while(iterator.hasNext())
         {
             targetSquare = iterator.next();
-            System.out.println(targetSquare.getPositionY());
+            // System.out.println(targetSquare.getPositionY());
             if(targetSquare.getPositionX() == 8 && targetSquare.getPositionY() == 8)
             {
                 isStart = true;
@@ -284,17 +284,17 @@ public class GameBoard
                     {
                         if(aroundSquare.get(i)!=null)
                         {
-                            if(!currentPlacement.contains(aroundSquare.get(i))&&aroundSquare.get(i).getTileOnSquare()!=null)
+                            if(!currentPlacement.contains(aroundSquare.get(i))&&aroundSquare.get(i).peekTileOnSquare()!=null)
                             {
                                 flagX = flagX || true;
                             }
                             if(isStart)
                             {
-                                System.out.println(count);
+                                // System.out.println(count);
                                 flagX = flagX || true;
                                 if(currentPlacement.size() == 1)
                                 {
-                                    System.out.println("here");
+                                    // System.out.println("here");
                                     restoreTileToPlayer();
                                     return false;
                                 }
@@ -334,7 +334,7 @@ public class GameBoard
                     {
                         if(aroundSquare.get(i)!=null)
                         {
-                            if(!currentPlacement.contains(aroundSquare.get(i))&&aroundSquare.get(i).getTileOnSquare()!=null)
+                            if(!currentPlacement.contains(aroundSquare.get(i))&&aroundSquare.get(i).peekTileOnSquare()!=null)
                             {
                                 flagY = flagY || true;
                             }
