@@ -109,17 +109,22 @@ public class Player
         }
     }
 
+<<<<<<< HEAD
     public boolean fillRack()
+=======
+    public void fillRack()
+>>>>>>> 6aa88eb8f99cd8ad3dc758a4f0a6709d9ac97204
     {
         int tileRemain = 7-playerTiles.getTileCount();
         if(TilePool.getTileCount()>=tileRemain)
         {
             selectTiles(tileRemain);
-            return true;
+            
         }
         else
         {
-            return false;
+            selectTiles(TilePool.getTileCount());
+            
         }
         
     }
