@@ -1,5 +1,3 @@
-package Scrabble;
-
 import java.util.*;
 /** 
  * GameBoard 
