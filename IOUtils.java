@@ -15,15 +15,16 @@ public class IOUtils {
      * @param prompt String to print, telling which coordinate
      * @return The string the user entered (maximum 100 chars long)
      */
-    public static String getString(String prompt) {
+    public static String getString(String prompt) 
+    {
         String inputString;
         int readBytes = 0;
         byte buffer[] = new byte[200];
-        System.out.println(prompt);
+        GameDisplay.displayMessageInline(prompt);
         try {
             readBytes = System.in.read(buffer, 0, 200);
         } catch (IOException ioe) {
-            System.out.println("Input/output exception - Exiting");
+            GameDisplay.displayMessageInline("Input/output exception - Exiting");
             System.exit(1);
         }
         inputString = new String(buffer);
@@ -32,7 +33,16 @@ public class IOUtils {
             inputString = inputString.substring(0, pos);
         return inputString;
     }
-
+    public static String getYesOrNo(String prompt) 
+    {
+        String inputString = getString(prompt);
+        while (!inputString.matches("[YNyn]")) 
+        {
+            GameDisplay.displayMessage("Please input Y or N");
+            inputString = getString(prompt);
+        }
+        return inputString;
+    }
     /**
      * Asks for an integer and returns it as the value of the function
      * 
@@ -45,11 +55,11 @@ public class IOUtils {
         String inputString;
         int readBytes = 0;
         byte buffer[] = new byte[200];
-        System.out.println(prompt);
+        GameDisplay.displayMessageInline(prompt);
         try {
             readBytes = System.in.read(buffer, 0, 200);
         } catch (IOException ioe) {
-            System.out.println("Input/output exception - Exiting");
+            GameDisplay.displayMessageInline("Input/output exception - Exiting");
             System.exit(1);
         }
         inputString = new String(buffer);
@@ -59,7 +69,7 @@ public class IOUtils {
                 inputString = inputString.substring(0, pos);
             value = Integer.parseInt(inputString);
         } catch (NumberFormatException nfe) {
-            System.out.println("Bad number entered");
+            GameDisplay.displayMessageInline("Bad number entered");
         }
         return value;
     }
@@ -77,7 +87,7 @@ public class IOUtils {
         int userInput = getInteger(prompt);
         while(userInput < min || userInput > max)
         {   
-            System.out.println("Input out of bound (min = "+min+" max = "+max+" )");
+            GameDisplay.displayMessageInline("Input out of bound (min = "+min+" max = "+max+" )");
             userInput = getInteger(prompt);
         }
         return userInput;
@@ -96,7 +106,7 @@ public class IOUtils {
         try {
             readBytes = System.in.read(buffer, 0, 200);
         } catch (IOException ioe) {
-            System.out.println("Input/output exception - Exiting");
+            GameDisplay.displayMessageInline("Input/output exception - Exiting");
             System.exit(1);
         }
         inputString = new String(buffer);

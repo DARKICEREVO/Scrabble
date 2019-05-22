@@ -67,7 +67,6 @@ public class Game
 
         }
         currentPlayer = orderedPlayers.remove();
-        // orderedPlayers.add(currentPlayer);
         GameDisplay.displayMessage(currentPlayer.getPlayerName()+" is first player");
     }
 
@@ -89,9 +88,9 @@ public class Game
     {
         boolean isTurnEnd = false;
         boolean isRemove = false;
-        GameDisplay.showGeneralDisplay();
         do
         {
+            GameDisplay.showGeneralDisplay();
             GameDisplay.displayMessage("What do you want to do?");
             GameDisplay.displayMessage("1)Place a word");
             GameDisplay.displayMessage("2)Swap tile(s)");
@@ -111,6 +110,18 @@ public class Game
                         boolean isPlaced = false;
                         do
                         {
+                            if(tile.getTileLetter().equals("-"))//blank
+                            {
+                                
+                                GameDisplay.displayMessage("Blank tile is chosen");
+                                String blankLetter = IOUtils.getString("Please enter A to Z> ");
+                                while(!blankLetter.matches("[a-zA-Z]"))
+                                {
+                                    blankLetter = IOUtils.getString("Please enter A to Z> ");
+                                }
+                                tile.setShownLetter(blankLetter);
+
+                            }
                             GameDisplay.displayMessageInline("at X =");
                             int positionX = IOUtils.getIntegerInRange("", 1, 15);
                             GameDisplay.displayMessageInline("at Y =");
@@ -121,8 +132,7 @@ public class Game
                         }while(!isPlaced);
                         tilesUsedCount++;
                         GameDisplay.showGeneralDisplay();
-                        GameDisplay.displayMessageInline("More tile? (Y or N)> ");
-                        answer = IOUtils.getString("");
+                        answer = IOUtils.getYesOrNo("More tile? (Y or N)> ");
                     }while(answer.equalsIgnoreCase("Y"));
                     boolean isPlaceCorrect = GameBoard.validatePlacement();
                     if(isPlaceCorrect)
@@ -134,6 +144,8 @@ public class Game
                     {
                         isTurnEnd = false;
                     }
+                    // GameDisplay.displayMessage("Your rack is filled.");
+                    // GameDisplay.showCurrentPlayerRack();
                     break;
                 case 2: // swap tiles
                     ArrayList<Tile> tiles = new ArrayList<Tile>();
@@ -141,18 +153,22 @@ public class Game
                     {
                         tile = getTileFromPlayer();
                         tiles.add(tile);
-                        GameDisplay.showCurrentPlayerRack();
-                        GameDisplay.displayMessageInline("More tile? (Y or N)> ");
-                        answer = IOUtils.getString("");
+                        GameDisplay.showGeneralDisplay();
+                        for(Tile tileToBeSwapped : tiles)
+                        {
+                            GameDisplay.displayMessageInline("[ "+tileToBeSwapped.getTileLetter()+" ]");
+                        }
+                        GameDisplay.displayMessage("");
+                        answer = IOUtils.getYesOrNo("More tile? (Y or N)> ");
                     }while(answer.equalsIgnoreCase("Y"));
                     currentPlayer.swapTile(tiles);
                     GameDisplay.displayMessage("Your new rack:");
                     GameDisplay.showCurrentPlayerRack();
+                    IOUtils.getString("Press any key to continue...");
                     isTurnEnd = true;
                     break;
                 case 3: // pass
-                    GameDisplay.displayMessageInline("Are you sure? (Y or N)> ");
-                    answer = IOUtils.getString("");
+                    answer = IOUtils.getYesOrNo("Are you sure? (Y or N)> ");
                     if(answer.equalsIgnoreCase("N"))
                     {
                         isTurnEnd = false;
@@ -187,6 +203,7 @@ public class Game
         //fill up CP tile
         currentPlayer.fillRack();
         orderedPlayers.add(currentPlayer);//enqueue CP to last of queue
+        GameBoard.clearCurrenPlacement();
         currentPlayer = orderedPlayers.remove(); //dequeue next player
     }
     
@@ -208,24 +225,21 @@ public class Game
     }
     private static Tile getTileFromPlayer()
     {
-        int tileID;
+        String tileLetter;
         Tile tile;
-        GameDisplay.displayMessageInline("Input Tile ID> ");
-        tileID = IOUtils.getIntegerInRange("", 0, 99);
-        tile = currentPlayer.getTile(tileID); 
+        tileLetter = IOUtils.getString("Input Tile Letter> ");
+        tile = currentPlayer.getTile(tileLetter); 
         while(tile==null)
         {
             GameDisplay.displayMessage("No such tile in your rack");
-            GameDisplay.displayMessageInline("Input Tile ID> ");
-            tileID = IOUtils.getIntegerInRange("", 0, 99);
-            tile = currentPlayer.getTile(tileID); 
+            tileLetter = IOUtils.getString("Input Tile Letter> ");
+            tile = currentPlayer.getTile(tileLetter); 
         }
         return tile;
     }
     private static void challenge() 
     {
-        GameDisplay.displayMessage("Any player want to challenge?(Y or N)");
-        String answer = IOUtils.getString("");
+        String answer = IOUtils.getYesOrNo("Any player want to challenge? (Y or N)> ");
         if(answer.equalsIgnoreCase("Y"))
         {
             ArrayList<String> allPlayerName = orderedPlayers.stream()
@@ -236,8 +250,7 @@ public class Game
             Player skippedPlayer = null;
             while(!playerExists)
             {
-                GameDisplay.displayMessageInline("Input player name> ");
-                String playerName = IOUtils.getString("");
+                String playerName = IOUtils.getString("Input player name> ");
                 for (Player player : orderedPlayers) 
                 {
                     if (player.getPlayerName().equalsIgnoreCase(playerName))

@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public class WordChecker
 {
-    private static ArrayList<String> words;
+    private static ArrayList<String> words = new ArrayList<String>();
 
     public WordChecker()
     {

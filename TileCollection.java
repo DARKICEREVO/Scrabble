@@ -68,8 +68,7 @@ public class TileCollection
         while(tileIterator.hasNext())
         {
             Tile currentTile = tileIterator.next();
-            System.out.print("["+currentTile.getTileLetter()+" ");
-            System.out.print(""+currentTile.getTileID()+"]");
+            System.out.print("[ "+currentTile.getTileLetter()+" ]");
 
             count++;
             if(count % 10 == 0)

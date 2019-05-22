@@ -90,7 +90,7 @@ public class GameBoard
         }
         else
         {
-            thingOnSquare = tile.getTileLetter();
+            thingOnSquare = tile.getShownLetter();
         }
         return thingOnSquare;
     }
