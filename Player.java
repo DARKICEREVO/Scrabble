@@ -35,6 +35,11 @@ public class Player
         return score;
     }
 
+    public Player getPlayerByName(String name)
+    {
+        return allPlayer.get(name);
+    }
+
     public void updateScore(int score)
     {
         this.score = this.score + score;
