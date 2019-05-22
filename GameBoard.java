@@ -169,13 +169,17 @@ public class GameBoard
     public static int calculateLastPlacementScore()
     {
         int totalScore=0;
-        int i;
         Iterator<SquareCollection> wordIterator = words.iterator();
         SquareCollection targetCollection;
         while(wordIterator.hasNext())
         {
             targetCollection = wordIterator.next();
             totalScore = totalScore + targetCollection.calculateScore();
+        }
+        wordIterator = words.iterator();
+        while(wordIterator.hasNext())
+        {
+            targetCollection = wordIterator.next();
             targetCollection.setSquareEffectOff();
         }
         return totalScore;
