@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -22,8 +23,8 @@ public class Game
 {
 
     private static Player currentPlayer;
-    private static ArrayList<Player> skippedPlayers;
-    private static Queue<Player> orderedPlayers;
+    private static ArrayList<Player> skippedPlayers = new ArrayList<Player>();
+    private static Queue<Player> orderedPlayers = new LinkedList<Player>();
     private static int endGameCounter;
 
     private Game() {}
@@ -33,48 +34,41 @@ public class Game
         TilePool.initialize();
         GameBoard.initialize();
         Dictionary.initialize();
-    }
+}
 
     public static void startGame(int numberOfPlayer)
     {
         int i=0;
         TreeMap<Tile,Player> startTilePlayerMap = new TreeMap<Tile,Player>(new StartTilePlayerComparator());
-        boolean isSameTileOccur = false; 
-        do
+        ArrayList<String> startLettersList = new ArrayList<String>();
+        for(i=0;i<numberOfPlayer;i++)
         {
-            isSameTileOccur = false;
-            for(i=0;i<numberOfPlayer;i++)
+            //ask for player's name
+            GameDisplay.displayMessage("What is player "+(i+1)+" name?");
+            //wait for input
+            String playerName = IOUtils.getString("");
+            Player player = new Player(playerName);
+            //check for duplicate name
+            Tile startTile;
+            do
             {
-                //ask for player's name
-                GameDisplay.displayMessage("What is player "+(i+1)+" name?");
-                //wait for input
-                String playerName = IOUtils.getString("");
-                Player player = new Player(playerName);
-                //check for duplicate name
-                startTilePlayerMap.put(player.getStartTile(), player); // need to give the tile back to pool
-            }
-            Stream<Tile> startTilesStream = startTilePlayerMap.keySet().stream();
-            Stream<String> startLetters = startTilesStream.map(tile -> tile.getTileLetter());
-            ArrayList<String> startLettersList = startLetters
-                                                            .collect(Collectors
-                                                            .toCollection(ArrayList::new));
-            for(String letter: startLettersList)
-            {
-                startLettersList.remove(letter);
-                if (startLettersList.contains(letter)) 
-                {
-                    isSameTileOccur = true;
-                    break;    
-                }
-            }
-        }while(isSameTileOccur);
-        //re-ordering player
-        for(Player player : startTilePlayerMap.values())
-        {
-            orderedPlayers.add(player);
+                startTile = player.getStartTile();
+            }while(startLettersList.contains(startTile.getTileLetter()));
+            startLettersList.add(startTile.getTileLetter());
+            startTilePlayerMap.put(startTile, player); // need to give the tile back to pool
         }
-        currentPlayer = orderedPlayers.peek();
-        GameDisplay.displayMessage(currentPlayer+" is first player");
+        //re-ordering player
+        for(Tile tile : startTilePlayerMap.keySet())
+        {
+            TilePool.addTile(tile);
+            Player player = startTilePlayerMap.get(tile);
+            player.fillRack();
+            orderedPlayers.add(startTilePlayerMap.get(tile));
+
+        }
+        currentPlayer = orderedPlayers.remove();
+        // orderedPlayers.add(currentPlayer);
+        GameDisplay.displayMessage(currentPlayer.getPlayerName()+" is first player");
     }
 
     /**
@@ -87,14 +81,15 @@ public class Game
 
     public static void removePlayer() 
     {
-        orderedPlayers.remove(currentPlayer);
         skippedPlayers.removeIf(player -> player.getPlayerID() == currentPlayer.getPlayerID());
-        nextTurn();
+        currentPlayer = orderedPlayers.remove();
     }
 
-    public static void takeTurn() 
+    public static boolean takeTurn() 
     {
         boolean isTurnEnd = false;
+        boolean isRemove = false;
+        GameDisplay.showGeneralDisplay();
         do
         {
             GameDisplay.displayMessage("What do you want to do?");
@@ -116,13 +111,16 @@ public class Game
                         boolean isPlaced = false;
                         do
                         {
+                            GameDisplay.displayMessageInline("at X =");
                             int positionX = IOUtils.getIntegerInRange("", 1, 15);
+                            GameDisplay.displayMessageInline("at Y =");
                             int positionY = IOUtils.getIntegerInRange("", 1, 15);
                             isPlaced = GameBoard.placeTileTo(positionX, positionY, tile);
                             if(!isPlaced)
                                 GameDisplay.displayMessage("Please select other square");
                         }while(!isPlaced);
                         tilesUsedCount++;
+                        GameDisplay.showGeneralDisplay();
                         GameDisplay.displayMessageInline("More tile? (Y or N)> ");
                         answer = IOUtils.getString("");
                     }while(answer.equalsIgnoreCase("Y"));
@@ -130,6 +128,7 @@ public class Game
                     if(isPlaceCorrect)
                     {
                         challenge();
+                        isTurnEnd = true;
                     }
                     else
                     {
@@ -137,18 +136,19 @@ public class Game
                     }
                     break;
                 case 2: // swap tiles
-                    ArrayList<Integer> tilesID = new ArrayList<Integer>();
+                    ArrayList<Tile> tiles = new ArrayList<Tile>();
                     do
                     {
                         tile = getTileFromPlayer();
-                        tilesID.add(tile.getTileID());//may be we can just send Tile instance?
+                        tiles.add(tile);
+                        GameDisplay.showCurrentPlayerRack();
                         GameDisplay.displayMessageInline("More tile? (Y or N)> ");
                         answer = IOUtils.getString("");
                     }while(answer.equalsIgnoreCase("Y"));
-                    int[] tilesIDIntArray = tilesID.stream()
-                                                .mapToInt(Integer::intValue)
-                                                .toArray(); 
-                    currentPlayer.swapTile(tilesIDIntArray);
+                    currentPlayer.swapTile(tiles);
+                    GameDisplay.displayMessage("Your new rack:");
+                    GameDisplay.showCurrentPlayerRack();
+                    isTurnEnd = true;
                     break;
                 case 3: // pass
                     GameDisplay.displayMessageInline("Are you sure? (Y or N)> ");
@@ -160,31 +160,34 @@ public class Game
                     else
                     {
                         GameDisplay.displayMessage(currentPlayer.getPlayerName()+" passed the turn");
+                        isTurnEnd = true;
                     }
                     break;
                 case 4: // quit
                     removePlayer();
+                    isTurnEnd = true;
+                    isRemove = true;
                     break;
             }
         }while(!isTurnEnd);
         boolean isEnd = isEnd();
-        if(!isEnd)
+        if(!isEnd && !isRemove)
+        {
             nextTurn();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public static void nextTurn() 
     {
         //fill up CP tile
-        while(currentPlayer.getPlayerTilesCount() < 7)
-        {
-            Tile newTile = TilePool.selectRandomTile();
-            if(newTile==null)
-                break;
-            currentPlayer.addTile(newTile);
-        }
+        currentPlayer.fillRack();
         orderedPlayers.add(currentPlayer);//enqueue CP to last of queue
         currentPlayer = orderedPlayers.remove(); //dequeue next player
-        
     }
     
     private static boolean isEnd() 
@@ -213,6 +216,7 @@ public class Game
         while(tile==null)
         {
             GameDisplay.displayMessage("No such tile in your rack");
+            GameDisplay.displayMessageInline("Input Tile ID> ");
             tileID = IOUtils.getIntegerInRange("", 0, 99);
             tile = currentPlayer.getTile(tileID); 
         }
@@ -220,43 +224,55 @@ public class Game
     }
     private static void challenge() 
     {
-        GameDisplay.displayMessage("Any player want to challenge?");
-        ArrayList<String> allPlayerName = orderedPlayers.stream()
-                                                    .map(player->player.getPlayerName())
-                                                    .collect(Collectors
-                                                    .toCollection(ArrayList::new));
-        boolean playerExists = false;
-        Player skippedPlayer = null;
-        while(!playerExists)
+        GameDisplay.displayMessage("Any player want to challenge?(Y or N)");
+        String answer = IOUtils.getString("");
+        if(answer.equalsIgnoreCase("Y"))
         {
-            GameDisplay.displayMessageInline("Input player name> ");
-            String playerName = IOUtils.getString("");
-            for (Player player : orderedPlayers) 
+            ArrayList<String> allPlayerName = orderedPlayers.stream()
+                                                        .map(player->player.getPlayerName())
+                                                        .collect(Collectors
+                                                        .toCollection(ArrayList::new));
+            boolean playerExists = false;
+            Player skippedPlayer = null;
+            while(!playerExists)
             {
-                if (player.getPlayerName().equalsIgnoreCase(playerName))
+                GameDisplay.displayMessageInline("Input player name> ");
+                String playerName = IOUtils.getString("");
+                for (Player player : orderedPlayers) 
                 {
-                    skippedPlayer = player;
-                    playerExists = true;
-                    break;
+                    if (player.getPlayerName().equalsIgnoreCase(playerName))
+                    {
+                        skippedPlayer = player;
+                        playerExists = true;
+                        break;
+                    }
                 }
             }
+    
+            boolean isInDictionary = WordChecker.verifyLastWords();
+            if(isInDictionary)
+            {
+                int totalScore = GameBoard.calculateLastPlacementScore();
+                currentPlayer.updateScore(totalScore);
+                skippedPlayers.add(skippedPlayer);
+            }
+            else
+            {
+                GameBoard.restoreTileToPlayer();
+            }
         }
-
-        boolean isInDictionary = WordChecker.verifyLastWords();
-        if(isInDictionary)
-        {
-            int totalScore = GameBoard.calculateLastPlacementScore();
-            currentPlayer.updateScore(totalScore);
-            skippedPlayers.add(skippedPlayer);
-        }
-        else
-        {
-            GameBoard.restoreTileToPlayer();
-        }
-
     }
     public static void main(String[] args) 
     {
-        
+        GameDisplay.displayMessage("How many people?");
+        int numberOfPlayers = IOUtils.getIntegerInRange("", 2, 4);
+        Game.initialize();
+        Game.startGame(numberOfPlayers);
+        boolean isGameEnd = false;
+        do
+        {
+            isGameEnd = Game.takeTurn();
+            System.out.println("End turn");
+        }while(!isGameEnd);
     }   
 }
