@@ -90,7 +90,7 @@ public class GameBoard
         }
         else
         {
-            thingOnSquare = tile.getShownLetter();
+            thingOnSquare = tile.getTileLetter();
         }
         return thingOnSquare;
     }
@@ -141,7 +141,7 @@ public class GameBoard
                 System.out.print(i+" ");
             for (int j = 1; j <= 15; j++) 
             {
-                String letterOnBoard = getSquareString(i, j);
+                String letterOnBoard = getSquareString(j, i);
                 // String letterOnBoard = new String(" ");
                 if(letterOnBoard.length() == 1)
                 {
@@ -222,6 +222,7 @@ public class GameBoard
     {
         Iterator<Square> iterator = currentPlacement.iterator();
         Square targetSquare;
+        boolean isStart = false;
         boolean isAlign=true;
         boolean alignX=true,alignY=true;
         boolean flagX = false,flagY = false;
@@ -233,6 +234,11 @@ public class GameBoard
         while(iterator.hasNext())
         {
             targetSquare = iterator.next();
+            System.out.println(targetSquare.getPositionY());
+            if(targetSquare.getPositionX() == 8 && targetSquare.getPositionY() == 8)
+            {
+                isStart = true;
+            }
             if(targetSquare.getPositionX() < lowestX)
             {
                 lowestX = targetSquare.getPositionX();
@@ -278,9 +284,20 @@ public class GameBoard
                     {
                         if(aroundSquare.get(i)!=null)
                         {
-                            if(!currentPlacement.contains(aroundSquare.get(i)))
+                            if(!currentPlacement.contains(aroundSquare.get(i))&&aroundSquare.get(i).getTileOnSquare()!=null)
                             {
                                 flagX = flagX || true;
+                            }
+                            if(isStart)
+                            {
+                                System.out.println(count);
+                                flagX = flagX || true;
+                                if(currentPlacement.size() == 1)
+                                {
+                                    System.out.println("here");
+                                    restoreTileToPlayer();
+                                    return false;
+                                }
                             }
                         }
                         
@@ -317,9 +334,18 @@ public class GameBoard
                     {
                         if(aroundSquare.get(i)!=null)
                         {
-                            if(!currentPlacement.contains(aroundSquare.get(i)))
+                            if(!currentPlacement.contains(aroundSquare.get(i))&&aroundSquare.get(i).getTileOnSquare()!=null)
                             {
                                 flagY = flagY || true;
+                            }
+                            if(isStart)
+                            {
+                                flagY = flagY || true;
+                                if(currentPlacement.size() == 1)
+                                {
+                                    restoreTileToPlayer();
+                                    return false;
+                                }
                             }
                         }
                         
