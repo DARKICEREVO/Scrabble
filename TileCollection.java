@@ -25,13 +25,7 @@ class TileComparator implements Comparator<Tile>
     @Override
     public int compare(Tile t1, Tile t2) 
     {
-        int different = t1.getTileValue() - t2.getTileValue();
-        // if score is equal, compare by id
-        if(different == 0) 
-        {
-            return t1.getTileID() - t2.getTileID();
-        }
-        return different;
+        return t1.getTileID() - t2.getTileID();
     }
     
 }
@@ -148,6 +142,20 @@ public class TileCollection
                 if(tile.getTileLetter().equalsIgnoreCase(letter))
                 {
                     removeTile(tile.getTileID());
+                    return tile;
+                }
+            }
+        }
+        return null;
+    }
+    public Tile peekTile(int tileID)
+    {
+        if(tiles.size() >= 1)
+        {
+            for(Tile tile : tiles)
+            {
+                if(tile.getTileID() == tileID)
+                {
                     return tile;
                 }
             }
