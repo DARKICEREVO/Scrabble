@@ -67,6 +67,11 @@ public class Player
         return playerTiles.getTile(tileID);
     }
 
+    public Tile getTile(String letter)
+    {
+        return playerTiles.getTile(letter);
+    }
+
     public void showTile()
     {
         
@@ -102,6 +107,21 @@ public class Player
         {
             TilePool.addTile(tmpCollection.get(i));
         }
+    }
+
+    public boolean filledRack()
+    {
+        int tileRemain = 7-playerTiles.getTileCount();
+        if(TilePool.getTileCount()>=tileRemain)
+        {
+            selectTiles(tileRemain);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
     }
 
 }
