@@ -1,3 +1,5 @@
+package Scrabble;
+
 import java.util.*;
 /** 
  * GameBoard 
@@ -134,7 +136,15 @@ public class GameBoard
             }
         }
         isAlign = alignX || alignY;
-        return isAlign;
+        if(isAlign)
+        {
+            return true;
+        }
+        else
+        {
+            restoreTileToPlayer();
+            return false;
+        }
         
     }
     /**
@@ -239,10 +249,9 @@ public class GameBoard
     public static void restoreTileToPlayer()
     {
         Iterator<Square> iterator = currentPlacement.iterator();
-        Player player;
+        Player player = Game.getCurrentPlayer();
         while(iterator.hasNext())
         {
-           player = Game.getCurrentPlayer();
            player.addTile(iterator.next().getTileOnSquare());
         }
         clearCurrenPlacement();

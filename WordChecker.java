@@ -1,24 +1,29 @@
+package Scrabble;
+
+import java.util.ArrayList;
+
 public class WordChecker
 {
-    private String lastWord;
+    private ArrayList<String> words;
 
-    public WordChecker(String word)
+    public WordChecker(ArrayList<String> words)
     {
-        lastWord = word;
+        this.words = new ArrayList<String>();
+        this.words = words;
     }
 
-    public String getLastWord()
+    public ArrayList<String> getWords()
     {
-        
+        return words;
     }
 
     public void updateLastWord()
     {
-
+        words = GameBoard.formWord();
     }
 
     public boolean verifyLastWord()
     {
-
+        
     }
 }
