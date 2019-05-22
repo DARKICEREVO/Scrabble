@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class Player
 {
@@ -35,9 +36,20 @@ public class Player
         return score;
     }
 
-    public Player getPlayerByName(String name)
+    public static ArrayList<String> getAllPlayersName() 
+    {
+        return allPlayer.keySet().stream()
+                            .collect(Collectors
+                            .toCollection(ArrayList::new));
+    }
+    public static Player getPlayerByName(String name)
     {
         return allPlayer.get(name);
+    }
+
+    public static void removePlayerByName(String name)
+    {
+        allPlayer.remove(name);
     }
 
     public void updateScore(int score)
