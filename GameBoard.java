@@ -273,9 +273,14 @@ public class GameBoard
 
             while(getSquare(mainX,checkerY)!=null)
             {
+                if(getSquare(mainX,checkerY).isEmpty())
+                {
+                    break;
+                }
                 if(currentPlacement.contains(getSquare(mainX,checkerY)))
                 {
                     count++;
+                    aroundSquare.clear();
                     aroundSquare.add(getSquare(mainX, checkerY - 1));
                     aroundSquare.add(getSquare(mainX, checkerY + 1));
                     aroundSquare.add(getSquare(mainX - 1, checkerY));
@@ -323,9 +328,14 @@ public class GameBoard
 
             while(getSquare(checkerX,mainY)!=null)
             {
+                if(getSquare(checkerX,mainY).isEmpty())
+                {
+                    break;
+                }
                 if(currentPlacement.contains(getSquare(checkerX,mainY)))
                 {
                     count++;
+                    aroundSquare.clear();
                     aroundSquare.add(getSquare(checkerX, mainY - 1));
                     aroundSquare.add(getSquare(checkerX, mainY + 1));
                     aroundSquare.add(getSquare(checkerX - 1, mainY));
