@@ -102,12 +102,30 @@ public class GameBoard
     {
         for (int i = 1; i <= 15; i++) 
         {
+            if(i==1)
+            {
+                System.out.print("   ");
+                for (int j = 0; j < 15; j++) 
+                {
+                    if(j+1<10)
+                        System.out.print("   "+(j+1)+"  ");
+                    else
+                        System.out.print("  "+((j+1)/10)+" "+((j+1)%10)+" ");
+    
+                }
+                System.out.println("");
+            }
+            System.out.print("   ");
             for (int j = 0; j < 15; j++) 
             {
                 System.out.print("+-----");    
             }
             System.out.println("+");    
-
+            
+            if(i<10)
+                System.out.print(i+"  ");
+            else
+                System.out.print(i+" ");
             for (int j = 1; j <= 15; j++) 
             {
                 String letterOnBoard = getSquareString(i, j);
@@ -129,6 +147,7 @@ public class GameBoard
             System.out.println("|");    
 
         }
+        System.out.print("   ");
         for (int j = 0; j < 15; j++) 
         {
             System.out.print("+-----");    
