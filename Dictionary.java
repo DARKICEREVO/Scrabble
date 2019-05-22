@@ -14,6 +14,7 @@ public class Dictionary
         String line;
         String word,mean;
         TextFileReader reader = new TextFileReader();
+        dictionary = new HashMap<String,String>();
         reader.open("Collins Scrabble Words (2015) with definitions.txt");
         reader.getNextLine();
         reader.getNextLine();
