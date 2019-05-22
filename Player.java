@@ -74,7 +74,7 @@ public class Player
 
     public void showTile()
     {
-        
+        playerTiles.showTiles();
     }
 
     public Tile getStartTile()
