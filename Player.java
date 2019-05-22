@@ -93,19 +93,12 @@ public class Player
             playerTiles.addTile(TilePool.selectRandomTile());
         }
     }
-
-    public void swapTile(int[] tilesID)
+    public void swapTile(ArrayList<Tile> tiles)
     {
-        int i;
-        ArrayList<Tile> tmpCollection = new ArrayList<Tile>();
-        for(i=0 ;i< tilesID.length ;i++)
+        selectTiles(tiles.size());
+        for(Tile tile:tiles)
         {
-            tmpCollection.add(playerTiles.getTile(tilesID[i]));
-        }
-        selectTiles(tilesID.length);
-        for(i=0 ;i< tilesID.length ;i++)
-        {
-            TilePool.addTile(tmpCollection.get(i));
+            TilePool.addTile(tile);
         }
     }
 
