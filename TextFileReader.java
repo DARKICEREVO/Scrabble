@@ -3,6 +3,10 @@
  *   Reads a text file line by line
  * 
  *   Created by Sally Goldin, 21 March 2012
+ * 	 Used by Patipon Petchtone 59070501049
+ * 		and  Puwit Yahom       59070501059
+ * 
+ * 	Thank you for your code :)
  */
 import java.io.*;
 

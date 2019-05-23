@@ -2,10 +2,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
-
-/**
- * TileCollection
- */
 /**
  * TileComparator class
  * used to tell how to compare 2 tiles for ordering purpose
@@ -29,12 +25,15 @@ class TileComparator implements Comparator<Tile>
     }
     
 }
+
 /**
  * TileCollection class
  * serve as general collection of tiles for tile pool 
  * and tile rack (for player)
  * 
- * Created by Puwit Yahom 22 May 2019
+ * created by Patipon Petchtone 59070501049
+ * and        Puwit Yahom       59070501059
+ * Date: 20 May 2019
  */
 public class TileCollection 
 {
@@ -95,9 +94,10 @@ public class TileCollection
     }
     
     /**
-     * 
-     * @param tileID
-     * @return
+     * Remove tile from collection using ID
+     * @param tileID    ID of tile to be deleted
+     * @return          true if tile count is more than 0,
+     *                  false otherwise
      */
     public boolean removeTile(int tileID) 
     {
@@ -111,11 +111,21 @@ public class TileCollection
         }
     }
 
+    /**
+     * Get number of tile in collection
+     * @return  number of tile in collection
+     */
     public int getTileCount()
     {
         return tiles.size();
     }
 
+    /**
+     * Get tile in collection using ID
+     * @param tileID ID of tile to be picked
+     * @return       tile that matched with <code>tileID</code>
+     *               null if there is no such tile
+     */
     public Tile getTile(int tileID)
     {
         if(tiles.size() >= 1)
@@ -131,7 +141,12 @@ public class TileCollection
         }
         return null;
     }
-
+    /**
+     * Get tile in collection using Letter
+     * @param letter    letter of tile to be picked
+     * @return          tile that matched with <code>letter</code>
+     *                  null if there is no such tile
+     */
     public Tile getTile(String letter)
     {
         if(tiles.size() >= 1)
@@ -147,6 +162,12 @@ public class TileCollection
         }
         return null;
     }
+    /**
+     * Get tile from collection but do not delete them from collection
+     * @param tileID    ID of tile to be peeked
+     * @return          tile that matched with <code>tileID</code>
+     *                  null if there is no such tile
+     */
     public Tile peekTile(int tileID)
     {
         if(tiles.size() >= 1)
@@ -192,6 +213,9 @@ public class TileCollection
         return null;
     }
 
+    /**
+     * Clear collection
+     */
     public void clear()
     {
         tiles.clear();

@@ -1,10 +1,23 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * SquareCollection.java
+ * This class represents a group of square(or a word)
+ * contains all tiles of the game
+ * created by Patipon Petchtone 59070501049
+ * and        Puwit Yahom       59070501059
+ * Date: 20 May 2019
+ */
 public class SquareCollection
 {
+    /** Group of square  */
     private ArrayList<Square> word;
 
+    /**
+     * Square constructor to form a word
+     * @param word  Group of square to be form into word
+     */
     public SquareCollection(ArrayList<Square> word)
     {
         this.word = word;
@@ -12,6 +25,7 @@ public class SquareCollection
     }
 
     /**
+     * Get collection of square (Word)
      * @return the word
      */
     public ArrayList<Square> getWord() 
@@ -19,6 +33,7 @@ public class SquareCollection
         return word;
     }
     /**
+     * Set collection of square (Word) 
      * @param word the word to set
      */
     public void setWord(ArrayList<Square> word) 
@@ -27,12 +42,19 @@ public class SquareCollection
         calculateScore();
     }
 
+    /**
+     * Add square to collection
+     * @param square square to be added
+     */
     public void addSquareToWord(Square square)
     {
         word.add(square);
         calculateScore();
     }
-
+    /**
+     * Calculate total score of word 
+     * @return  total score of word
+     */
     public int calculateScore()
     {
         int score=0;
@@ -51,7 +73,9 @@ public class SquareCollection
         score = score * wordMultiplier;
         return score;
     }
-
+    /**
+     * Unset multiplier of square after use
+     */
     public void setSquareEffectOff()
     {
         Iterator<Square> squareIterator = word.iterator();
@@ -63,7 +87,10 @@ public class SquareCollection
         }
        
     }
-
+    /**
+     * Return collection as string (or return word itself)
+     * @return  String of word
+     */
     public String getStringOfCollection()
     {
         String text = new String();
