@@ -5,7 +5,13 @@ import java.util.Queue;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+/**
+ * Game.java
+ * this class represent a Facade of this game to control flow of the game
+ * created by Patipon Petchtone 59070501049
+ * and        Puwit Yahom       59070501059
+ * Date: 20 May 2019
+ */
 class StartTilePlayerComparator implements Comparator<Tile>
 {
 
@@ -16,27 +22,34 @@ class StartTilePlayerComparator implements Comparator<Tile>
     }
 
 }
-/**
- * Game
- */
+
 public class Game 
 {
-
+    /**the player that is playing in this turn */
     private static Player currentPlayer;
+    /**the list of player that failed in challenging and will skip their turn */
     private static ArrayList<Player> skippedPlayers = new ArrayList<Player>();
+    /**the queue of player in this game  */
     private static Queue<Player> orderedPlayers = new LinkedList<Player>();
+    /**the counter that used to indicate in game ending */
     private static int endGameCounter;
+    /**playername in correct order */
     private static ArrayList<String> orderedPlayerName = new ArrayList<String>();
 
     private Game() {}
-
+    /**
+     * use to initial game by delegate initial main component of the game
+     */
     public static void initialize() 
     {
         TilePool.initialize();
         GameBoard.initialize();
         Dictionary.initialize();
 }
-
+    /**
+     * use to start and control flow in the startphase of the game such as enter name and find first Player
+     * @param numberOfPlayer number of player in the game
+     */
     public static void startGame(int numberOfPlayer)
     {
         int i=0;
@@ -87,23 +100,34 @@ public class Game
     }
 
     /**
+     * return current player in this turn
      * @return the currentPlayer
      */
     public static Player getCurrentPlayer() 
     {
         return currentPlayer;
     }
+    /**
+     * get playername in correct order
+     * @return name of player in order
+     */
     public static ArrayList<String> getOrderedPlayerName()
     {
         return orderedPlayerName;
     }
+    /**
+     * dequeue player as next player and remove if it in skippedPlayer
+     */
     public static void removePlayer() 
     {
         skippedPlayers.removeIf(player -> player.getPlayerID() == currentPlayer.getPlayerID());
         Player.removePlayerByName(currentPlayer.getPlayerName());
         currentPlayer = orderedPlayers.remove();
     }
-
+    /**
+     * use to control flow in turn of player by providing 4 action place,swap,pass,quit
+     * @return true if notEnd ,otherwise false
+     */
     public static boolean takeTurn() 
     {
         boolean isTurnEnd = false;
@@ -221,14 +245,16 @@ public class Game
         if(!isEnd && !isRemove)
         {
             nextTurn();
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
-
+    /**
+     * 
+     */
     public static void nextTurn() 
     {
         //fill up CP tile
@@ -317,11 +343,11 @@ public class Game
         int numberOfPlayers = IOUtils.getIntegerInRange("", 2, 4);
         Game.initialize();
         Game.startGame(numberOfPlayers);
-        boolean isGameEnd = false;
+        boolean isGameNotEnd = true;;
         do
         {
-            isGameEnd = Game.takeTurn();
+            isGameNotEnd = Game.takeTurn();
             System.out.println("End turn");
-        }while(!isGameEnd);
+        }while(isGameNotEnd);
     }   
 }
