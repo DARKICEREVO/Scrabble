@@ -81,6 +81,7 @@ public class Game
     public static void removePlayer() 
     {
         skippedPlayers.removeIf(player -> player.getPlayerID() == currentPlayer.getPlayerID());
+        Player.removePlayerByName(currentPlayer.getPlayerName());
         currentPlayer = orderedPlayers.remove();
     }
 
@@ -91,6 +92,12 @@ public class Game
         do
         {
             GameDisplay.showGeneralDisplay();
+            GameDisplay.displayMessage("Score");
+            for(String name : Player.getAllPlayersName())
+            {
+                Player player = Player.getPlayerByName(name);
+                GameDisplay.displayMessage(player.getPlayerName()+ " : "+player.getScore());
+            }
             GameDisplay.displayMessage("What do you want to do?");
             GameDisplay.displayMessage("1)Place a word");
             GameDisplay.displayMessage("2)Swap tile(s)");
@@ -242,10 +249,7 @@ public class Game
         String answer = IOUtils.getYesOrNo("Any player want to challenge? (Y or N)> ");
         if(answer.equalsIgnoreCase("Y"))
         {
-            ArrayList<String> allPlayerName = orderedPlayers.stream()
-                                                        .map(player->player.getPlayerName())
-                                                        .collect(Collectors
-                                                        .toCollection(ArrayList::new));
+            ArrayList<String> allPlayerName = Player.getAllPlayersName();
             boolean playerExists = false;
             Player skippedPlayer = null;
             while(!playerExists)
