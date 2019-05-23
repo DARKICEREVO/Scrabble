@@ -8,7 +8,7 @@ public class Player
     private String playerName;
     private TileCollection playerTiles;
     private int score;
-    private static HashMap<String,Player> allPlayer = new HashMap<String,Player>();
+    private static HashMap<String,Player> allPlayers = new HashMap<String,Player>();
     private static int counter = 1;
 
     public Player(String playerName)
@@ -17,7 +17,7 @@ public class Player
         this.playerName = playerName;
         playerTiles = new TileCollection(0,7);
         this.score = 0;
-        allPlayer.put(playerName,this);
+        allPlayers.put(playerName,this);
         counter++;
     }
     
@@ -38,18 +38,18 @@ public class Player
 
     public static ArrayList<String> getAllPlayersName() 
     {
-        return allPlayer.keySet().stream()
+        return allPlayers.keySet().stream()
                             .collect(Collectors
                             .toCollection(ArrayList::new));
     }
     public static Player getPlayerByName(String name)
     {
-        return allPlayer.get(name);
+        return allPlayers.get(name);
     }
 
     public static void removePlayerByName(String name)
     {
-        allPlayer.remove(name);
+        allPlayers.remove(name);
     }
 
     public void updateScore(int score)
@@ -97,10 +97,10 @@ public class Player
         
     }
 
-    public void selectTiles(int numberOfTile)
+    public void selectTiles(int numberOfTiles)
     {
         int i;
-        for(i=0 ;i < numberOfTile ;i++)
+        for(i=0 ;i < numberOfTiles ;i++)
         {
             playerTiles.addTile(TilePool.selectRandomTile());
         }

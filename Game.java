@@ -26,6 +26,7 @@ public class Game
     private static ArrayList<Player> skippedPlayers = new ArrayList<Player>();
     private static Queue<Player> orderedPlayers = new LinkedList<Player>();
     private static int endGameCounter;
+    private static ArrayList<String> orderedPlayerName = new ArrayList<String>();
 
     private Game() {}
 
@@ -41,12 +42,26 @@ public class Game
         int i=0;
         TreeMap<Tile,Player> startTilePlayerMap = new TreeMap<Tile,Player>(new StartTilePlayerComparator());
         ArrayList<String> startLettersList = new ArrayList<String>();
+        ArrayList<String> playersName = new ArrayList<String>();
         for(i=0;i<numberOfPlayer;i++)
         {
             //ask for player's name
-            GameDisplay.displayMessage("What is player "+(i+1)+" name?");
+            String playerName;
+            boolean isNameTaken = false;
+            do
+            {
+                GameDisplay.displayMessage("What is player "+(i+1)+" name?");
+                playerName = IOUtils.getString("");
+                for(String name : playersName)
+                {
+                    isNameTaken = playerName.equalsIgnoreCase(name);
+                    if(isNameTaken)
+                        break;
+                }
+                playersName.add(playerName);
+            }while(isNameTaken);
             //wait for input
-            String playerName = IOUtils.getString("");
+            
             Player player = new Player(playerName);
             //check for duplicate name
             Tile startTile;
@@ -63,6 +78,7 @@ public class Game
             TilePool.addTile(tile);
             Player player = startTilePlayerMap.get(tile);
             player.fillRack();
+            orderedPlayerName.add(player.getPlayerName());
             orderedPlayers.add(startTilePlayerMap.get(tile));
 
         }
@@ -77,7 +93,10 @@ public class Game
     {
         return currentPlayer;
     }
-
+    public static ArrayList<String> getOrderedPlayerName()
+    {
+        return orderedPlayerName;
+    }
     public static void removePlayer() 
     {
         skippedPlayers.removeIf(player -> player.getPlayerID() == currentPlayer.getPlayerID());
@@ -89,7 +108,8 @@ public class Game
     {
         boolean isTurnEnd = false;
         boolean isRemove = false;
-        do
+        boolean isSkippedPlayer = skippedPlayers.remove(currentPlayer);
+        while(!isTurnEnd && !isSkippedPlayer)
         {
             GameDisplay.showGeneralDisplay();
             GameDisplay.displayMessage("Score");
@@ -153,6 +173,7 @@ public class Game
                     }
                     // GameDisplay.displayMessage("Your rack is filled.");
                     // GameDisplay.showCurrentPlayerRack();
+                    endGameCounter = 0;
                     break;
                 case 2: // swap tiles
                     ArrayList<Tile> tiles = new ArrayList<Tile>();
@@ -173,6 +194,7 @@ public class Game
                     GameDisplay.showCurrentPlayerRack();
                     IOUtils.getString("Press any key to continue...");
                     isTurnEnd = true;
+                    endGameCounter++;
                     break;
                 case 3: // pass
                     answer = IOUtils.getYesOrNo("Are you sure? (Y or N)> ");
@@ -184,7 +206,9 @@ public class Game
                     {
                         GameDisplay.displayMessage(currentPlayer.getPlayerName()+" passed the turn");
                         isTurnEnd = true;
+                        endGameCounter++;
                     }
+                    endGameCounter++;
                     break;
                 case 4: // quit
                     removePlayer();
@@ -192,7 +216,7 @@ public class Game
                     isRemove = true;
                     break;
             }
-        }while(!isTurnEnd);
+        }
         boolean isEnd = isEnd();
         if(!isEnd && !isRemove)
         {
@@ -276,7 +300,15 @@ public class Game
             else
             {
                 GameBoard.restoreTileToPlayer();
+                GameDisplay.showGeneralDisplay();
+                GameDisplay.displayMessage(currentPlayer.getPlayerName()+"'s word(s) is invalid");
+                GameDisplay.displayMessage("Restore tile");
             }
+        }
+        else
+        {
+            int totalScore = GameBoard.calculateLastPlacementScore();
+            currentPlayer.updateScore(totalScore);
         }
     }
     public static void main(String[] args) 

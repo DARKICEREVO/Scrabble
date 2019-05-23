@@ -115,7 +115,7 @@ public class Square
     /**
      * change status of effect to inactive
      */
-    public void usedEffect()
+    public void useEffect()
     {
         isEffectOn = false;
         calculateCurrentScore();
@@ -162,6 +162,4 @@ public class Square
         }
         
     }
-    
-
 }

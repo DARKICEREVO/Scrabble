@@ -59,7 +59,7 @@ public class SquareCollection
         while(squareIterator.hasNext())
         {
             targetSquare = squareIterator.next();
-            targetSquare.usedEffect();
+            targetSquare.useEffect();
         }
        
     }

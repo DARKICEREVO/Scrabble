@@ -90,7 +90,7 @@ public class GameBoard
         }
         else
         {
-            thingOnSquare = tile.getTileLetter();
+            thingOnSquare = tile.getShownLetter();
         }
         return thingOnSquare;
     }
@@ -431,7 +431,7 @@ public class GameBoard
             while(!getSquare(startX, wordPointerY).isEmpty())
             {
                
-               tmpConcatenatorY+=getSquare(startX, wordPointerY).peekTileOnSquare().getTileLetter();
+               tmpConcatenatorY+=getSquare(startX, wordPointerY).peekTileOnSquare().getShownLetter();
                newWords.add(getSquare(startX, wordPointerY));
                wordPointerY++;
             }
@@ -444,7 +444,7 @@ public class GameBoard
             while(!getSquare(wordPointerX, startY).isEmpty())
             {
                
-               tmpConcatenatorX+=getSquare(wordPointerX, startY).peekTileOnSquare().getTileLetter();
+               tmpConcatenatorX+=getSquare(wordPointerX, startY).peekTileOnSquare().getShownLetter();
                newWords.add(getSquare(wordPointerX, startY));
                wordPointerX++;
             }

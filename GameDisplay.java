@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * GameDisplay
  */
@@ -12,6 +15,16 @@ public class GameDisplay
         clearScreen();
         showBoard();
         Player currentPlayer = Game.getCurrentPlayer();
+        Iterator<String> playerOrdering = Game.getOrderedPlayerName().iterator();
+        while(playerOrdering.hasNext())
+        {
+            String name = playerOrdering.next();
+            displayMessageInline(name);
+            if(playerOrdering.hasNext())
+                displayMessageInline(" -> ");
+
+        }
+        displayMessage("");
         displayMessage(currentPlayer.getPlayerName()+"'s turn");
         displayMessage("Your rack:");
         currentPlayer.showTile();
@@ -40,12 +53,26 @@ public class GameDisplay
         // {
         //     System.out.println("");
         // }
-        try 
+        String os = System.getProperty("os.name").toLowerCase();
+        if(os.contains("window"))
         {
-            new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
-        } catch (Exception e) 
+            try 
+            {
+                new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
+            } catch (Exception e) 
+            {
+                System.out.println(e);
+            }
+        }
+        else
         {
-            System.out.println(e);
+            try 
+            {
+                new ProcessBuilder("/bin/sh","-c","clear").inheritIO().start().waitFor();
+            } catch (Exception e) 
+            {
+                System.out.println(e);
+            }
         }
     }
     public static void main(String[] args) 

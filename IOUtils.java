@@ -92,39 +92,4 @@ public class IOUtils {
         }
         return userInput;
     }
-    /**
-     * Reads a string and returns it as the value of the function, without any
-     * prompt. Remove the newline before returning.
-     * 
-     * @param prompt String to print, telling which coordinate
-     * @return The string the user entered (maximum 100 chars long)
-     */
-    public static String getBareString() {
-        String inputString;
-        int readBytes = 0;
-        byte buffer[] = new byte[200];
-        try {
-            readBytes = System.in.read(buffer, 0, 200);
-        } catch (IOException ioe) {
-            GameDisplay.displayMessageInline("Input/output exception - Exiting");
-            System.exit(1);
-        }
-        inputString = new String(buffer);
-        int pos = inputString.indexOf("\n");
-        if (pos > 0)
-            inputString = inputString.substring(0, pos);
-        return inputString;
-    }
-
-    /**
-     * Creates and returns a string with the current date and time, to use as a time
-     * stamp.
-     * 
-     * @return date/time string in the form "yyyy-mm-dd hh:mm:ss"
-     */
-    public static String getDateTime() {
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return formatter.format(now);
-    }
 }
