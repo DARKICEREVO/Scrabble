@@ -218,7 +218,7 @@ public class GameBoard
      * check the current placement.are in the same alignment.
      * @return true if currentplacement is aligned,otherwise false
      */
-    public static boolean validatePlacement()
+    public static boolean verifyPlacement()
     {
         Iterator<Square> iterator = currentPlacement.iterator();
         Square targetSquare;

@@ -161,7 +161,7 @@ public class Game
                         GameDisplay.showGeneralDisplay();
                         answer = IOUtils.getYesOrNo("More tile? (Y or N)> ");
                     }while(answer.equalsIgnoreCase("Y"));
-                    boolean isPlaceCorrect = GameBoard.validatePlacement();
+                    boolean isPlaceCorrect = GameBoard.verifyPlacement();
                     if(isPlaceCorrect)
                     {
                         challenge();
