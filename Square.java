@@ -1,7 +1,9 @@
 /**
  * Square.java
  * Represent each square in boardgame.this include calculation of each square
- * Created by Patipon Petchtone 17 May 2019
+ * Created by Patipon Petchtone 59070501049
+ * and     by Puwit   Yahom     59070501059
+ * DATE : 17 May 2019
  */
 public class Square
 {

@@ -3,7 +3,8 @@ import java.util.*;
  * GameBoard 
  * represent Board of Scrabble game with fuction to form and calculate words
  * Created By Patipon Petchtone 59070501049 CPE
- * 
+ * and        Puwit Yahom       59070501059 CPE
+ * Date: 20 May 2019
  * Board Indexing
  *   X  1   2   3   4   5
  *  Y

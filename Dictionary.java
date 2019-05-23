@@ -8,6 +8,7 @@ import java.util.HashMap;
  */
 public class Dictionary 
 {
+    /**Hashmap that store a word and meaning as key value */
     private static HashMap<String,String> dictionary;
 
     private Dictionary()

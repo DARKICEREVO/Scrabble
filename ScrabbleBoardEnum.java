@@ -1,7 +1,9 @@
 /**
  * ScrabbleBoard enum
  * enum file for initialize Square in the game
- * Created by Patipon Petchtone 18 May 2019
+ * Created by Patipon Petchtone 59070501049 
+ * and     by Puwit Yahom   59070501059
+ * DATE: 18 May 2019
  */
 public enum ScrabbleBoardEnum
 {
