@@ -150,7 +150,7 @@ public class Square
     {
         if(tileOnSquare == null)
         {
-            
+            currentScore = 0;
         }
         else if (isEffectOn)
         {

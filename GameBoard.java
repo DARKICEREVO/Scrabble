@@ -317,6 +317,7 @@ public class GameBoard
             }
             else
             {
+                WordChecker.updateLastWords(formWord());
                 return true;
             }
         }
@@ -370,6 +371,7 @@ public class GameBoard
             }
             else
             {
+                WordChecker.updateLastWords(formWord());
                 return true;
             }
         }
@@ -391,6 +393,7 @@ public class GameBoard
         int wordPointerX,wordPointerY;
         ArrayList<String> wordList =  new ArrayList<String>();
         Iterator<Square> iterator = currentPlacement.iterator();
+        words = new ArrayList<SquareCollection>();
         while(iterator.hasNext())
         {
             String tmpConcatenatorX = new String();
@@ -452,6 +455,12 @@ public class GameBoard
             }
 
         }
+        for(int i=0;i<wordList.size();i++)
+        {
+            System.out.println(wordList.get(i));
+            System.out.println(words.get(i).getStringOfCollection());
+        }
+        
         return wordList;
     }
     /**

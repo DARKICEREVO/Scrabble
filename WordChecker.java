@@ -7,7 +7,7 @@ public class WordChecker
 {
     private static ArrayList<String> words = new ArrayList<String>();
 
-    public WordChecker()
+    private WordChecker()
     {
        
     }
@@ -17,14 +17,14 @@ public class WordChecker
         return words;
     }
 
-    public static void updateLastWords()
+    public static void updateLastWords(ArrayList<String> newWords)
     {
-        words = GameBoard.formWord();
+        words = newWords;
     }
 
     public static boolean verifyLastWords()
     {
-        boolean isOk = true;;
+        boolean isOk = true;
         Iterator<String> iterator = words.iterator();
         String targetWord;
         while(iterator.hasNext())

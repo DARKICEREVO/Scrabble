@@ -63,4 +63,17 @@ public class SquareCollection
         }
        
     }
+
+    public String getStringOfCollection()
+    {
+        String text = new String();
+        Iterator<Square> squareIterator = word.iterator();
+        Square targetSquare;
+        while(squareIterator.hasNext())
+        {
+            targetSquare = squareIterator.next();
+            text+=targetSquare.peekTileOnSquare().getTileLetter();
+        }
+        return text;
+    }
 }
