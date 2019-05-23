@@ -253,7 +253,7 @@ public class Game
         }
     }
     /**
-     * 
+     * give turn to nextPlayer
      */
     public static void nextTurn() 
     {
@@ -263,7 +263,10 @@ public class Game
         GameBoard.clearCurrenPlacement();
         currentPlayer = orderedPlayers.remove(); //dequeue next player
     }
-    
+    /**
+     * check the game is end or not
+     * @return boolean if true game end otherwise game continue
+     */
     private static boolean isEnd() 
     {
         if(TilePool.getTileCount() == 0)
@@ -280,6 +283,10 @@ public class Game
         }
         return false;
     }
+    /**
+     * use to get the tile from player by player selection
+     * @return Tile that player select
+     */
     private static Tile getTileFromPlayer()
     {
         String tileLetter;
@@ -294,6 +301,9 @@ public class Game
         }
         return tile;
     }
+    /**
+     * control flow of challenge phase in game
+     */
     private static void challenge() 
     {
         String answer = IOUtils.getYesOrNo("Any player want to challenge? (Y or N)> ");
